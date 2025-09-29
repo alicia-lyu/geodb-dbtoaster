@@ -22,11 +22,14 @@ namespace dbtoaster {
 class CustomProgram : public Program {
   long customer_seen = 0;
   std::chrono::high_resolution_clock::time_point start_time = {};
+  std::chrono::high_resolution_clock::time_point epoch_time = {};
   const long WARMUP_COUNT = 450000;
   long memory_usage_kb = 0;
 
 public:
-  CustomProgram(int argc = 0, char *argv[] = 0) : Program(argc, argv) {}
+  CustomProgram(int argc = 0, char *argv[] = 0) : Program(argc, argv) {
+    epoch_time = std::chrono::high_resolution_clock::now();
+  }
   void final_stats() {
     if (customer_seen <= WARMUP_COUNT) {
       std::cout << "\nNot enough updates to measure maintenance time."
@@ -72,8 +75,14 @@ public:
     }
     if (customer_seen % 1000 == 0) {
       memory_usage_kb = get_memory_usage_linux();
+      auto current_time = std::chrono::high_resolution_clock::now();
+      std::chrono::duration<double> epoch_diff = current_time - epoch_time;
+      double epoch_seconds = epoch_diff.count();
+      double update_time = epoch_seconds * 1e6 / 1000;
+      epoch_time = current_time;
       std::cout << "\rProcessed " << customer_seen
-                << " customers, memory usage: " << memory_usage_kb << " KB."
+                << " customers, memory usage: " << memory_usage_kb
+                << " KB, update time (last 1000): " << update_time << " us."
                 << std::flush;
     }
   }
