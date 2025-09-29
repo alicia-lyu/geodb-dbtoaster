@@ -3,7 +3,7 @@ CREATE TABLE NATION (
     N_NAME STRING,
     N_COMMENT STRING,
     LAST_STATEKEY INT
-) FROM FILE '/mnt/ssd/geo_btree/build/15/nation2.dat' LINE DELIMITED CSV (fields := '|');
+) FROM FILE '/mnt/ssd/geo_btree/build/15/nation2.dat' LINE DELIMITED CSV (fields := ',');
 
 CREATE TABLE STATES (
     NATIONKEY INT,
@@ -11,7 +11,7 @@ CREATE TABLE STATES (
     S_NAME STRING,
     S_COMMENT STRING,
     LAST_COUNTYKEY INT
-) FROM FILE '/mnt/ssd/geo_btree/build/15/states.dat' LINE DELIMITED CSV (fields := '|');
+) FROM FILE '/mnt/ssd/geo_btree/build/15/states.dat' LINE DELIMITED CSV (fields := ',');
 
 CREATE TABLE COUNTIES (
     NATIONKEY INT,
@@ -20,7 +20,7 @@ CREATE TABLE COUNTIES (
     C_NAME STRING,
     C_COMMENT STRING,
     LAST_CITYKEY INT
-) FROM FILE '/mnt/ssd/geo_btree/build/15/county.dat' LINE DELIMITED CSV (fields := '|');
+) FROM FILE '/mnt/ssd/geo_btree/build/15/county.dat' LINE DELIMITED CSV (fields := ',');
 
 CREATE TABLE CITIES (
     NATIONKEY INT,
