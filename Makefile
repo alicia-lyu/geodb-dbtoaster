@@ -5,20 +5,24 @@ count_lines:
 	wc -l /mnt/ssd/geo_btree/build/15/city.dat
 	wc -l /mnt/ssd/geo_btree/build/15/customer2.dat
 
-join_view.hpp: join_view.sql count_lines
-	dbtoaster join_view.sql -l cpp -o join_view.hpp
+views.hpp: views.sql count_lines
+	dbtoaster views.sql -l cpp -o views.hpp
 
 mixed_view.hpp: mixed_view.sql count_lines
 	dbtoaster mixed_view.sql -l cpp -o mixed_view.hpp
 
-./build/join_view: main.cpp join_view.hpp
-	cd build && cmake .. && make join_view
+./build/views: main.cpp views.hpp
+	cd build && cmake .. && make views
 
 ./build/mixed_view: main.cpp mixed_view.hpp
 	cd build && cmake .. && make mixed_view
 
-run_join: ./build/join_view
-	./build/join_view
+run_join: ./build/views
+	./build/views
 
-run_mixed: ./build/mixed_view
-	./build/mixed_view
+experiment:
+	$(MAKE) run_join
+	ulimit -v 2800000 && $(MAKE) run_join
+	ulimit -v 2400000 && $(MAKE) run_join
+	ulimit -v 2000000 && $(MAKE) run_join
+	ulimit -v 1600000 && $(MAKE) run_join

@@ -1,9 +1,6 @@
-#ifdef JOIN_VIEW
-#include "join_view.hpp"
-#else
-#include "mixed_view.hpp"
-#endif
+#include "views.hpp"
 #include <chrono>
+#include <filesystem>
 #include <iostream>
 
 long get_memory_usage_linux() {
@@ -58,6 +55,12 @@ public:
     if (customer_seen > WARMUP_COUNT) {
       std::cout << "Average time per update: " << update_time << " us."
                 << std::endl;
+      bool file_exists = std::filesystem::exists("update_times.csv");
+      std::ofstream ofs("update_times.csv", std::ios::app);
+      if (!file_exists) {
+        ofs << "update_time_us,memory_kb" << std::endl;
+      }
+      ofs << update_time << "," << memory_usage_kb << std::endl;
     }
   }
 
