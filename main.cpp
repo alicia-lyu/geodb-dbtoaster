@@ -1,7 +1,7 @@
 #ifdef JOIN_VIEW
-    #include "join_view.hpp"
+#include "join_view.hpp"
 #else
-    #include "mixed_view.hpp"
+#include "mixed_view.hpp"
 #endif
 #include <chrono>
 #include <iostream>
@@ -71,11 +71,8 @@ public:
       memory_usage_kb = get_memory_usage_linux();
     }
     Program::process_stream_event(ev);
-    
-    // if (customer_seen >= WARMUP_COUNT) {
-    //   [[maybe_unused]] dbtoaster::Program::snapshot_t snap =
-    //     Program::take_snapshot(); // force sync
-    // }
+    if (customer_seen >= WARMUP_COUNT) {
+    }
     if (customer_seen % 1000 == 0) {
       memory_usage_kb = get_memory_usage_linux();
       auto current_time = std::chrono::high_resolution_clock::now();
@@ -98,12 +95,11 @@ int main(int argc, char *argv[]) {
             << std::endl;
   p.init();
   dbtoaster::Program::snapshot_t snap = p.take_snapshot();
-  // auto count_map = snap->get_COUNT();
-  // std::cout << "Initial COUNT: " << count_map.count() << std::endl;
   std::cout << "Static tables loaded and initial view computed." << std::endl;
-  p.run();
+  p.run(true);
+  while (!p.is_finished()) {
+    snap = p.take_snapshot();
+  }
   snap = p.take_snapshot();
-  // count_map = snap->get_COUNT();
-  // std::cout << "Final COUNT: " << count_map.count() << std::endl;
   p.final_stats();
 }
