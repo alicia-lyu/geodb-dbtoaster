@@ -65,6 +65,10 @@ public:
   }
 
   void process_stream_event(const event_t &ev) override {
+    if (ev.id != get_relation_id("CUSTOMER2")) {
+      Program::process_stream_event(ev);
+      return;
+    }
     customer_seen++;
     if (customer_seen == WARMUP_COUNT + 1) {
       std::cout << "\nWarmup complete (" << WARMUP_COUNT << " customers)."

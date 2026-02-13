@@ -17,12 +17,12 @@ mixed_view.hpp: mixed_view.sql count_lines
 ./build/mixed_view: main.cpp mixed_view.hpp
 	cd build && cmake .. && make mixed_view
 
-run_join: ./build/views
+run: ./build/views
 	./build/views
 
 experiment:
-	$(MAKE) run_join
-	ulimit -v 2800000 && $(MAKE) run_join
-	ulimit -v 2400000 && $(MAKE) run_join
-	ulimit -v 2000000 && $(MAKE) run_join
-	ulimit -v 1600000 && $(MAKE) run_join
+	$(MAKE) run
+	ulimit -v 2800000 && $(MAKE) run
+	ulimit -v 2400000 && $(MAKE) run
+	ulimit -v 2000000 && $(MAKE) run
+	ulimit -v 1600000 && $(MAKE) run
