@@ -24,7 +24,7 @@ class CustomProgram : public Program {
   long customer_seen = 0;
   std::chrono::high_resolution_clock::time_point start_time = {};
   std::chrono::high_resolution_clock::time_point epoch_time = {};
-  const long WARMUP_COUNT = 450000;
+  const long WARMUP_COUNT = 400000;
   long memory_usage_kb = 0;
 
 public:
