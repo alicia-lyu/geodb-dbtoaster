@@ -12,16 +12,16 @@ RUN apt-get update && apt-get install -y \
 
 # 1. Download and install DBToaster from official source
 WORKDIR /opt
-RUN wget https://dbtoaster.github.io/dist/dbtoaster_linux_64.tar.gz \
-    && tar -xvf dbtoaster_linux_64.tar.gz \
-    && rm dbtoaster_linux_64.tar.gz
+RUN wget https://dbtoaster.github.io/dist/dbtoaster_2.3_linux.tgz \
+    && tar -xvf dbtoaster_2.3_linux.tgz \
+    && rm dbtoaster_2.3_linux.tgz
 ENV PATH="/opt/dbtoaster/bin:${PATH}"
 
 # 2. Only copy the geodb folder (ensure you run build from the parent dir)
 WORKDIR /geodb
-COPY ./geodb/views.sql ./views.sql
-COPY ./geodb/main.cpp ./main.cpp
-COPY ./geodb/CMakeLists.txt ./CMakeLists.txt
+COPY ./views.sql ./views.sql
+COPY ./main.cpp ./main.cpp
+COPY ./CMakeLists.txt ./CMakeLists.txt
 
 # 3. Generate and build views
 RUN dbtoaster views.sql -l cpp -o views.hpp \
@@ -34,16 +34,20 @@ FROM ubuntu:22.04 AS runner
 
 RUN apt-get update && apt-get install -y \
     libstdc++6 \
+    libboost-serialization-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the binary from builder
-COPY ./geodb/entrypoint.sh /app/entrypoint.sh
+# FIX: You MUST copy the binary from the builder stage
+COPY --from=builder /geodb/build/views /app/views
+COPY ./entrypoint.sh /app/entrypoint.sh
 
-# 4. Copy data files directly into the image (adjust the source path as needed)
-# Assumes your data is in a local 'data' folder next to geodb
-RUN mkdir -p /mnt/ssd/geo_btree/build/15
-COPY ./data/*.dat /mnt/ssd/geo_btree/build/15/
+# 4. Copy data files
+RUN mkdir -p ./data
+COPY ./data_files/*.dat ./data
 
 RUN chmod +x /app/entrypoint.sh
 WORKDIR /results
+
+# Ensure the app can find libdbtoaster if it's a shared library
+# (Though usually it's static)
 ENTRYPOINT ["/app/entrypoint.sh"]
