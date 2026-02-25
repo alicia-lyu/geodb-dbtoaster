@@ -37,17 +37,15 @@ RUN apt-get update && apt-get install -y \
     libboost-serialization-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# FIX: You MUST copy the binary from the builder stage
 COPY --from=builder /geodb/build/views /app/views
 COPY ./entrypoint.sh /app/entrypoint.sh
 
-# 4. Copy data files
-RUN mkdir -p ./data
-COPY ./data_files/*.dat ./data
+# FIX: Create an absolute path for data
+RUN mkdir -p /app/data_files
+COPY ./data_files/*.dat /app/data_files/
 
 RUN chmod +x /app/entrypoint.sh
-WORKDIR /results
 
-# Ensure the app can find libdbtoaster if it's a shared library
-# (Though usually it's static)
+# Set the workdir where the binary will run
+WORKDIR /app
 ENTRYPOINT ["/app/entrypoint.sh"]

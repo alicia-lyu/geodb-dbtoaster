@@ -3,7 +3,7 @@ CREATE STREAM NATION (
     N_NAME STRING,
     N_COMMENT STRING,
     LAST_STATEKEY INT
-) FROM FILE '/mnt/ssd/geo_btree/build/15/nation2.dat' LINE DELIMITED CSV (fields := ',');
+) FROM FILE './data_files/nation2.dat' LINE DELIMITED CSV (fields := ',');
 
 SELECT *
 FROM NATION; -- ensure stored
@@ -14,7 +14,7 @@ CREATE STREAM STATES (
     S_NAME STRING,
     S_COMMENT STRING,
     LAST_COUNTYKEY INT
-) FROM FILE '/mnt/ssd/geo_btree/build/15/states.dat' LINE DELIMITED CSV (fields := ',');
+) FROM FILE './data_files/states.dat' LINE DELIMITED CSV (fields := ',');
 
 SELECT *
 FROM STATES; -- ensure stored
@@ -26,7 +26,7 @@ CREATE STREAM COUNTY (
     C_NAME STRING,
     C_COMMENT STRING,
     LAST_CITYKEY INT
-) FROM FILE '/mnt/ssd/geo_btree/build/15/county.dat' LINE DELIMITED CSV (fields := ',');
+) FROM FILE './data_files/county.dat' LINE DELIMITED CSV (fields := ',');
 
 SELECT *
 FROM COUNTY; -- ensure stored
@@ -38,7 +38,7 @@ CREATE STREAM CITY (
     CITYKEY INT,
     CI_NAME STRING,
     CI_COMMENT STRING
-) FROM FILE '/mnt/ssd/geo_btree/build/15/city.dat' LINE DELIMITED CSV (fields := ',');
+) FROM FILE './data_files/city.dat' LINE DELIMITED CSV (fields := ',');
 
 SELECT *
 FROM CITY; -- ensure stored
@@ -55,7 +55,7 @@ CREATE STREAM CUSTOMER2 (
     C_ACCTBAL DOUBLE,
     C_MKTSEGMENT STRING,
     C_COMMENT STRING
-) FROM FILE '/mnt/ssd/geo_btree/build/15/customer2.dat' LINE DELIMITED CSV (fields := ',');
+) FROM FILE './data_files/customer2.dat' LINE DELIMITED CSV (fields := ',');
 
 SELECT *
 FROM CUSTOMER2; -- ensure stored

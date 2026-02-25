@@ -1,9 +1,9 @@
 count_lines:
-	wc -l /mnt/ssd/geo_btree/build/15/nation2.dat
-	wc -l /mnt/ssd/geo_btree/build/15/states.dat
-	wc -l /mnt/ssd/geo_btree/build/15/county.dat
-	wc -l /mnt/ssd/geo_btree/build/15/city.dat
-	wc -l /mnt/ssd/geo_btree/build/15/customer2.dat
+	wc -l ./data_files/nation2.dat
+	wc -l ./data_files/states.dat
+	wc -l ./data_files/county.dat
+	wc -l ./data_files/city.dat
+	wc -l ./data_files/customer2.dat
 
 views.hpp: views.sql count_lines
 	dbtoaster views.sql -l cpp -o views.hpp
