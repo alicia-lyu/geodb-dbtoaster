@@ -8,15 +8,15 @@ set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 # Add the executable target from main.cpp
 add_executable(views main.cpp)
 
-set(DBT_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../lib/dbt_c++)
+set(DBT_LIB_DIR /opt/dbtoaster/lib/dbt_c++)
 
-# Specify include directories (-I flag)
+# Specify include directories
 target_include_directories(views PRIVATE ${DBT_LIB_DIR})
 
-# Specify link directories (-L flag)
+# Specify link directories
 target_link_directories(views PRIVATE ${DBT_LIB_DIR})
 
-# Link the required library (-l flag)
+# Link the required library
 target_link_libraries(views PRIVATE dbtoaster)
 
 # Set the optimization level for release builds (-O3 flag)
