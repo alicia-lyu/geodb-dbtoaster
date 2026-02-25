@@ -22,10 +22,9 @@ RUN apt-get update && apt-get install -y \
     libstdc++6 \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /mnt/ssd/geo_btree/build/15
-
 COPY --from=builder /dbtoaster/geodb/build/views /app/views
 COPY geodb/entrypoint.sh /app/entrypoint.sh
+COPY --from=geodata . /mnt/ssd/geo_btree/build/15
 RUN chmod +x /app/entrypoint.sh
 
 WORKDIR /results
