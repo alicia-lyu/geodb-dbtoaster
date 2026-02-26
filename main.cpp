@@ -23,13 +23,11 @@ namespace dbtoaster {
 class CustomProgram : public Program {
   long customer_seen = 0;
   std::chrono::high_resolution_clock::time_point start_time = {};
-  std::chrono::high_resolution_clock::time_point epoch_time = {};
   const long WARMUP_COUNT = 400000;
   long memory_usage_kb = 0;
 
 public:
   CustomProgram(int argc = 0, char *argv[] = 0) : Program(argc, argv) {
-    epoch_time = std::chrono::high_resolution_clock::now();
   }
   void final_stats() {
     if (customer_seen <= WARMUP_COUNT) {
@@ -78,18 +76,15 @@ public:
       memory_usage_kb = get_memory_usage_linux();
     }
     Program::process_stream_event(ev);
-    if (customer_seen >= WARMUP_COUNT) {
-    }
-    if (customer_seen % 1000 == 0) {
+    if (customer_seen >= WARMUP_COUNT && customer_seen % 1000 == 0) {
       memory_usage_kb = get_memory_usage_linux();
       auto current_time = std::chrono::high_resolution_clock::now();
-      std::chrono::duration<double> epoch_diff = current_time - epoch_time;
+      std::chrono::duration<double> epoch_diff = current_time - start_time;
       double epoch_seconds = epoch_diff.count();
-      double update_time = epoch_seconds * 1e6 / 1000;
-      epoch_time = current_time;
+      double update_time = epoch_seconds * 1e6 / (customer_seen - WARMUP_COUNT);
       std::cout << "\rProcessed " << customer_seen
                 << " customers, memory usage: " << memory_usage_kb
-                << " KB, update time (last 1000): " << update_time << " us."
+                << " KB, update time (acc since warmup): " << update_time << " us."
                 << std::flush;
     }
   }
